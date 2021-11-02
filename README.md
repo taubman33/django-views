@@ -2,11 +2,10 @@
 
 
 
-# Django Views & Templates
-
+# Django Views & Templates 
 This lesson will build off of the lesson on Django models and migrations and
 wrap up everything we need to build basic applications with Django. Today, we
-are going to look at how to actually display our data using views and templates!
+are going to look at how to actually display our data using views and s!
 
 ## Prerequisites
 
@@ -173,7 +172,8 @@ urlpatterns = [
 
 </details>
 
-## Templates and Django Templating Language
+## Templates and Django Templating Language -> Do this via copy and paste, and don't worry too much about the back end of it
+
 
 Now that we have two URLs, let's finish up by writing the templates to render
 our views! Django has its own templating language used for rendering, which its own syntax.
@@ -530,8 +530,7 @@ Let's break this down:
 - Then in the `link` tag, we can refer to our stylesheet and include our static `tunr.css` file. This is essentially the same as requiring any stylesheet in an html boilerplate.
 - This may seem a bit messy, but it really helps when you deploy your app, especially if you want to host your static files on a separate server.
 
-## We Do: Artist Create
-
+## We Do: Artist Create -> Important! 
 So far we've just shown our artists. Let's now create a new one! First, create
 a file called `forms.py` in the `tunr` directory. This is going to be where we
 make our forms using Python code.
