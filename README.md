@@ -4,7 +4,9 @@
 # Django Views & Templates 
 This lesson will build off of the lesson on Django models and migrations and
 wrap up everything we need to build basic applications with Django. Today, we
-are going to look at how to actually display our data using views and s!
+are going to look at how to actually display our data using views
+
+Then, we will convert it into JSON data!
 
 ## Prerequisites
 
