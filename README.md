@@ -577,7 +577,11 @@ path('songs/<int:pk>/delete', views.song_delete, name='song_delete')
 
 </details>
 
-
+## Now that we have our data viewable on the screen, lets convert it into JSON format!
+	
+	
+	
+	
 ## Additional Resources
 
 - [Django Docs: Templates](https://docs.djangoproject.com/en/2.1/topics/templates/)
