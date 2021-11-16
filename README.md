@@ -348,187 +348,7 @@ Album: {{ song.album }}
 
 </details>
 
-## We Do: base.html and CSS
 
-Right now we have two views, but they are really ugly. Let's do something about
-that! Add a `base.html` file in the `tunr` templates. It's going to look exactly
-like any other HTML base template we normally have, with one exception: we will
-have a block where we want our template to go. We will name this block content.
-
-> NOTE: We could have multiple blocks if we wanted. In that case they would be
-> named other things -- say "title" or "header" instead of "content".
-
-```html
-<!-- tunr/templates/tunr/base.html -->
-<html>
-  <head>
-    <title>Tunr</title>
-  </head>
-  <body>
-    <h1>Tun.r</h1>
-    <nav>
-      <a href="/songs">Songs</a>
-      <a href="/">Artists</a>
-    </nav>
-    {% block content %} {% endblock %}
-  </body>
-</html>
-```
-
-In order to use our `base.html` file as a boilerplate for the rest of our
-templates, we must add some code to each of our template files.
-
-```html
-<!-- tunr/templates/tunr/artist_list.html -->
-{% extends 'tunr/base.html' %} {% block content %}
-<h2>Artists <a href="">(+)</a></h2>
-<ul>
-  {% for artist in artists %}
-  <li>
-    <a href="{% url 'artist_detail' pk=artist.id %}">{{ artist.name }}</a>
-  </li>
-  {% endfor %}
-</ul>
-{% endblock %}
-```
-
-Each template is going to extend the base by adding `{% extends 'tunr/base.html' %}` to the beginning of the file. The content between `{% block content %}` and
-`{% endblock %}` will render in place of the content block in the `base.html`
-file.
-
-Next, let's add styling. By default, Django is going to host our static files in
-the `static` folder. Add a `static` directory, a `css` subdirectory, and
-a `tunr.css` file to the `tunr` directory. Copy the following css code into
-`tunr.css`:
-
-```css
-/* tunr/static/css/tunr.css */
-body {
-  font-family: "Helvetica Neue", sans-serif;
-  max-width: 50em;
-  margin: auto;
-  padding: 2em 1em;
-}
-
-nav a {
-  border: 1px solid black;
-  margin: 0.5em;
-  padding: 0.5em;
-  background-color: #eeeeee;
-}
-
-nav a:hover {
-  background-color: orange;
-  color: blue;
-}
-
-a,
-a:visited {
-  text-decoration: none;
-  color: blue;
-}
-
-a:hover {
-  background-color: #ccc;
-}
-
-ul {
-  list-style-type: none;
-}
-
-li {
-  margin: 0.25em;
-}
-
-h1 {
-  font: inherit;
-  color: inherit;
-  letter-spacing: -0.05em;
-  text-decoration: none;
-  border-bottom: 1px solid black;
-}
-
-h2 > a {
-  font-size: 0.75em;
-}
-
-input {
-  display: block;
-  margin: 5px 0 20px 0;
-  padding: 9px;
-  border: solid 1px black;
-  width: 300px;
-  background: whitesmoke;
-}
-
-input[type="submit"],
-a.delete {
-  width: auto;
-  padding: 9px 15px;
-  background-color: gray;
-  border: 0;
-  font-size: 14px;
-  color: #ffffff;
-}
-
-a.delete {
-  background-color: red;
-}
-
-.artist-photo {
-  width: 400px;
-}
-
-span.nationality {
-  font-size: 0.5em;
-}
-
-.user-info {
-  float: right;
-}
-
-a.fav {
-  text-decoration: none;
-  color: red;
-}
-
-a.no-fav {
-  text-decoration: none;
-  color: black;
-}
-
-.fav:visited,
-.no-fav:visited {
-  text-decoration: none;
-}
-```
-
-Finally, add the following code into `base.html`:
-
-```html
-<!-- tunr/templates/tunr/base.html -->
-{% load static %}
-<html>
-  <head>
-    <title>Tunr</title>
-    <link rel="stylesheet" href="{% static 'css/tunr.css' %}" />
-  </head>
-  <body>
-    <h1>Tun.r</h1>
-    <nav>
-      <a href="/songs">Songs</a>
-      <a href="/">Artists</a>
-    </nav>
-    {% block content %} {% endblock %}
-  </body>
-</html>
-```
-
-Let's break this down:
-
-- On the first line, we are telling Django to load the static files onto the current page.
-- Then in the `link` tag, we can refer to our stylesheet and include our static `tunr.css` file. This is essentially the same as requiring any stylesheet in an html boilerplate.
-- This may seem a bit messy, but it really helps when you deploy your app, especially if you want to host your static files on a separate server.
 
 ## We Do: Artist Create -> Important! 
 So far we've just shown our artists. Let's now create a new one! First, create
@@ -595,19 +415,6 @@ Next, add a url:
 path('artists/new', views.artist_create, name='artist_create'),
 ```
 
-Finally, let's make the template. Since we already declared the fields we want
-in our form in the `forms.py` file, we can just do this:
-
-```html
-<!-- tunr/templates/tunr/artist_form.html -->
-{% extends 'tunr/base.html' %} {% block content %}
-<h1>New Artist</h1>
-<form method="POST" class="artist-form">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="save btn btn-default">Save</button>
-</form>
-{% endblock %}
-```
 
 When we declare our form tags in html we need to have our `csrf_token`, and then
 we can just insert our form like `{{ form.as_p }}`. The `.as_p` just formats the
@@ -621,23 +428,7 @@ to prevent such attacks.
 In our `artist_list.html` file, update the `href` to include a path to our
 `artist_create` url.
 
-```html
-<!-- tunr/templates/tunr/artist_list.html -->
-<h2>Artists <a href="{% url 'artist_create' %}">(+)</a></h2>
-<ul>
-  {% for artist in artists %}
-  <li>
-    <a href="{% url 'artist_detail' pk=artist.pk %}">
-      {{ artist.name }}
-    </a>
-  </li>
-  {% endfor %}
-</ul>
-```
 
-### You Do: Song Create
-
-Your turn! Do the same as above but for the song creation form.
 
 <details>
 <summary>Solution: Song Create Form in tunr/forms.py</summary>
@@ -680,28 +471,7 @@ path('songs/new', views.song_create, name='song_create')
 ```
 
 </details>
-<details>
-<summary>Solution: Song Create Template in tunr/templates/tunr/song_form.html</summary>
 
-```html
-{% extends 'tunr/base.html' %} {% block content %}
-<h1>New Song</h1>
-<form method="POST" class="song-form">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="save btn btn-default">Save</button>
-</form>
-{% endblock %}
-```
-
-</details>
-<details>
-<summary>Solution: Artist Show Template Update</summary>
-
-```html
-<h3>Songs <a href="{% url 'song_create' %}">(+)</a></h3>
-```
-
-</details>
 
 ## We Do: Artist Edit
 
@@ -734,17 +504,6 @@ Next, add a new url:
 path('artists/<int:pk>/edit', views.artist_edit, name='artist_edit'),
 ```
 
-Finally, update the `href` in `artist_detail.html` with a path to the `artist_edit` url:
-
-```html
-<!-- tunr/templates/tunr/artist_detail.html -->
-<h2>
-  {{ artist.name }} <a href="{% url 'artist_edit' pk=artist.pk %}">(edit)</a>
-</h2>
-```
-
-### You Do: Song Edit
-
 Do the same thing for the song edit form!
 
 <details>
@@ -772,16 +531,9 @@ path('songs/<int:pk>/edit', views.song_edit, name='song_edit')
 ```
 
 </details>
-<details>
-<summary>Solution: Song Show Template Update</summary>
 
-```html
-<h2>{{ song.title }} <a href="{% url 'song_edit' pk=song.pk %}">(edit)</a></h2>
-```
 
-</details>
-
-## We Do: Artist Delete
+## Artist Delete
 
 Delete functions are really simple as well.
 
@@ -801,34 +553,8 @@ Let's add the url:
 path('artists/<int:pk>/delete', views.artist_delete, name='artist_delete'),
 ```
 
-And update the `artist_detail.html` template to include delete functionality:
 
-```diff
-{% extends 'tunr/base.html' %} {% block content %}
-<h2>
-  {{ artist.name }} <a href="{% url 'artist_edit' pk=artist.pk %}">(edit)</a>
-</h2>
-<h4>{{ artist.nationality }}</h4>
-
-<img src="{{ artist.photo_url }}" alt="" class="artist-photo" />
-
-+ <a href="{% url 'artist_delete' pk=artist.pk %}">Delete</a>
-
-<h3>Songs <a href="{% url 'song_create' %}">(+)</a></h3>
-<ul>
-  {% for song in artist.songs.all %}
-  <li>
-    <a href="{% url 'song_detail' pk=song.pk %}"
-      >{{ song.title }}-{{ song.album }}</a
-    >
-  </li>
-  {% endfor %}
-</ul>
-{% endblock %}
-
-```
-
-### You Do: Song Delete
+### Song Delete
 
 Do the same thing for Songs!
 
