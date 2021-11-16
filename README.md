@@ -1,5 +1,4 @@
-# django-views
-
+# Django lessons 3 of 5
 
 
 # Django Views & Templates 
