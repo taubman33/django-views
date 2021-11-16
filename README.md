@@ -577,18 +577,6 @@ path('songs/<int:pk>/delete', views.song_delete, name='song_delete')
 
 </details>
 
-<details>
-<summary>Solution: Song Delete Template in turn/templates/tunr/song_detail.html</summary>
-	
-```diff
-{% extends 'tunr/base.html' %} {% block content %}
-<h2>{{ song.title }} <a href="{% url 'song_edit' pk=song.pk %}">(edit)</a></h2>
-<h3>By: {{ song.artist.name }}</h3>
-+ <a href="{% url 'song_delete' pk=song.pk %}">Delete</a>
-Album: {{ song.album }} {% endblock %}
-```
-
-</details>
 
 ## Additional Resources
 
